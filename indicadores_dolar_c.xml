@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DataSet xmlns="http://ws.sdde.bccr.fi.cr">
+  <xs:schema id="Datos_de_INGC011_CAT_INDICADORECONOMIC" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="Datos_de_INGC011_CAT_INDICADORECONOMIC" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="INGC011_CAT_INDICADORECONOMIC">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="COD_INDICADORINTERNO" type="xs:string" minOccurs="0" />
+                <xs:element name="DES_FECHA" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="NUM_VALOR" type="xs:decimal" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1">
+    <Datos_de_INGC011_CAT_INDICADORECONOMIC xmlns="">
+      <INGC011_CAT_INDICADORECONOMIC diffgr:id="INGC011_CAT_INDICADORECONOMIC1" msdata:rowOrder="0">
+        <COD_INDICADORINTERNO>317</COD_INDICADORINTERNO>
+        <DES_FECHA>2022-09-12T00:00:00-06:00</DES_FECHA>
+        <NUM_VALOR>637.60000000</NUM_VALOR>
+      </INGC011_CAT_INDICADORECONOMIC>
+    </Datos_de_INGC011_CAT_INDICADORECONOMIC>
+  </diffgr:diffgram>
+</DataSet>

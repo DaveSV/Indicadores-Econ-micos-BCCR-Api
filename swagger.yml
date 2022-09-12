@@ -1,0 +1,36 @@
+swagger: "2.0"
+info:
+  description: Este es el archivo que va con nuestro código de servidor
+  version: "1.0.0"
+  title: API Tipo de Cambio BCCR
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+basePath: "/api"
+
+# Paths supported by the server application
+paths:
+  /tipodecambio:
+    get:
+      operationId: "tipodecambio.read"
+      tags:
+        - "tipodecambio"
+      summary: "La estructura de datos de cambio de moneda (euro/dólar/colón) soportada por la aplicación del servidor"
+      description: "Lea la lista de intercambio de moneda(compra/venta)"
+      responses:
+        200:
+          description: "Operación exitosa de la lista de intercambio de lectura"
+          schema:
+            type: "array"
+            items:
+              properties:
+                divisa:
+                  type: "string"
+                compra:
+                  type: "integer"
+                venta:
+                  type: "integer"
+                fecha:
+                  type: "string"
