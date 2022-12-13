@@ -21,10 +21,14 @@ def consulta_bccr_euro():
     mydoc = minidom.parse('indicadores_euro.xml')
 
     # asigna tipo de cambio a la variable
-    valores = mydoc.getElementsByTagName('NUM_VALOR')
-    for elem in valores:
-        valor_euro = (elem.firstChild.data)
-    return valor_euro
+    try:    
+        valores = mydoc.getElementsByTagName('NUM_VALOR')
+        for elem in valores:
+            valor_euro = (elem.firstChild.data)
+        return valor_euro
+    except:
+        valor_euro = 0
+        return valor_euro
 
 def consulta_bccr_dolar_compra():
     r = urlopen("https://gee.bccr.fi.cr/Indicadores/Suscripciones/WS/wsindicadoreseconomicos.asmx/ObtenerIndicadoresEconomicos?Indicador=317&FechaInicio=" + hoy + "&FechaFinal=" + hoy + "&Nombre=Dave&SubNiveles=N&CorreoElectronico=alb.saenz@gmail.com&Token=IL7CLLIAAL")
@@ -66,8 +70,8 @@ TIPODECAMBIO = {
     },
     "Euro": {
         "divisa": "Euro",
-        "compra": consulta_bccr_euro(),
-        "venta": consulta_bccr_euro(),
+        "compra": float(consulta_bccr_euro()) * float(consulta_bccr_dolar_compra()),
+        "venta": float(consulta_bccr_euro()) * float(consulta_bccr_dolar_venta()),
         "fecha": get_timestamp()
     }
 }
