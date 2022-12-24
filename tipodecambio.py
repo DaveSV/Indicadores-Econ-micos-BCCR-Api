@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 from datetime import datetime
 from xml.dom import minidom
 from urllib.request import urlopen
