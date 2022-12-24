@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from xml.dom import minidom
 from urllib.request import urlopen
@@ -86,7 +85,7 @@ def read():
     :return:        sorted list of people
     """
     # Create the list of people from our data
-=======
+
 from datetime import datetime
 from xml.dom import minidom
 from urllib.request import urlopen
