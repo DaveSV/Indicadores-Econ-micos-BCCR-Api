@@ -173,5 +173,5 @@ def read():
     :return:        sorted list of people
     """
     # Create the list of people from our data
->>>>>>> 02607a6d92cdc0499ae544983af743cc5885df90
+
     return [TIPODECAMBIO[key] for key in sorted(TIPODECAMBIO.keys())]
