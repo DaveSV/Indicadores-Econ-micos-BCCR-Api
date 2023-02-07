@@ -1,18 +1,27 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from xml.dom import minidom
 from urllib.request import urlopen
 
-valor_euro = 0
+#valor_euro = 0
 valor_dolar_compra = 0
 valor_dolar_venta = 0
 
 def get_timestamp():
     return datetime.now().strftime(("%d/%m/%Y"))
 
+def get_timestamp_y():
+    now = datetime.now()+timedelta(days=-1)
+    format = now.strftime('%d/%m/%Y')
+    return format
+
+yesterday = get_timestamp_y()
 hoy = get_timestamp()
 
+
+
 def consulta_bccr_euro():
-    r = urlopen("https://gee.bccr.fi.cr/Indicadores/Suscripciones/WS/wsindicadoreseconomicos.asmx/ObtenerIndicadoresEconomicos?Indicador=333&FechaInicio=" + hoy + "&FechaFinal=" + hoy + "&Nombre=Dave&SubNiveles=N&CorreoElectronico=alb.saenz@gmail.com&Token=IL7CLLIAAL")
+    valor_euro = 0
+    r = urlopen("https://gee.bccr.fi.cr/Indicadores/Suscripciones/WS/wsindicadoreseconomicos.asmx/ObtenerIndicadoresEconomicos?Indicador=333&FechaInicio=" + yesterday + "&FechaFinal=" + yesterday + "&Nombre=Dave&SubNiveles=N&CorreoElectronico=alb.saenz@gmail.com&Token=IL7CLLIAAL")
     with open("indicadores_euro.xml", "wb") as f:
         f.write(r.read())
     r.close()
