@@ -25,4 +25,4 @@ Venta
 Fecha
 
 ## Visible en:
-https://exchangecr.onrender.com/api/tipodecambio
+https://exchangecr.albertosaenz.com/api/tipodecambio
