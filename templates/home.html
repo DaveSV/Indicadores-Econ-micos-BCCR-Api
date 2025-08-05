@@ -10,6 +10,45 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+    // This code will run when the entire page is loaded
+    $(document).ready(function() {
+        // Fetches data from the API
+        $.getJSON("https://exchangecr.albertosaenz.com/api/tipodecambio", function(data) {
+            // Check if the data was successfully retrieved
+            if (data && data.length > 0) {
+                let htmlContent = "";
+                // Iterates through each currency in the API response
+                data.forEach(function(item) {
+                    htmlContent += `
+                        <p><strong>Divisa:</strong> ${item.divisa}</p>
+                        <p><strong>Compra:</strong> ₡ ${parseFloat(item.compra).toFixed(2)}</p>
+                        <p><strong>Venta:</strong> ₡ ${parseFloat(item.venta).toFixed(2)}</p>
+                        <hr>
+                    `;
+                });
+
+                // Displays the pop-up window using SweetAlert
+                swal({
+                    title: "Tipos de Cambio Actuales",
+                    content: {
+                        element: "div",
+                        attributes: {
+                            innerHTML: htmlContent
+                        },
+                    },
+                    icon: "info",
+                    button: "Aceptar"
+                });
+            } else {
+                console.log("No se pudo obtener la información de la API.");
+            }
+        }).fail(function(jqxhr, textStatus, error) {
+            var err = textStatus + ", " + error;
+            console.log("Request Failed: " + err);
+        });
+    });
+</script>
 <script>
 function enviar_ajax(){	
 
