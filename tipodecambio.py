@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 import xml.etree.ElementTree as ET
-from urllib.request import urlopen
 import requests
 import logging
 
