@@ -1,0 +1,52 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Este es el archivo que va con nuestro código de servidor",
+    "version" : "1.0.0",
+    "title" : "API Tipo de Cambio BCCR"
+  },
+  "basePath" : "/api",
+  "consumes" : [ "application/json" ],
+  "produces" : [ "application/json" ],
+  "paths" : {
+    "/tipodecambio" : {
+      "get" : {
+        "tags" : [ "tipodecambio" ],
+        "summary" : "La estructura de datos de cambio de moneda (euro/dólar/colón) soportada por la aplicación del servidor",
+        "description" : "Lea la lista de intercambio de moneda(compra/venta)",
+        "operationId" : "tipodecambio.read",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Operación exitosa de la lista de intercambio de lectura",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/inline_response_200"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "inline_response_200" : {
+      "type" : "object",
+      "properties" : {
+        "divisa" : {
+          "type" : "string"
+        },
+        "compra" : {
+          "type" : "integer"
+        },
+        "venta" : {
+          "type" : "integer"
+        },
+        "fecha" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
+}
