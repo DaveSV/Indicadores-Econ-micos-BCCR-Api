@@ -36,3 +36,24 @@ paths:
                   type: "number"
                 fecha:
                   type: "string"
+
+  /tipodecambio/semanal:
+    get:
+      operationId: "tipodecambio.read_weekly"
+      tags:
+        - "tipodecambio"
+      summary: "Serie semanal de tipos de cambio"
+      description: "Retorna la evolución diaria de dólar y euro para los últimos 7 días"
+      responses:
+        200:
+          description: "Operación exitosa de la serie semanal"
+          schema:
+            type: "array"
+            items:
+              properties:
+                date:
+                  type: "string"
+                usd:
+                  type: "object"
+                euro:
+                  type: "object"

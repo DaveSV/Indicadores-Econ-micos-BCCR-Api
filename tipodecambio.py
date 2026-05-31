@@ -76,6 +76,38 @@ def fetch_euro_rate_with_fallback(reference_date=None, max_lookback_days=7):
 
     return None, None
 
+
+def get_weekly_exchange_rates(days=7):
+    """
+    Builds a 7-day series for US Dollar and Euro.
+    Euro values use the last official business-day value when needed.
+    """
+    today = datetime.now()
+    series = []
+
+    for offset in range(days - 1, -1, -1):
+        current_date = today - timedelta(days=offset)
+        date_str = current_date.strftime("%d/%m/%Y")
+
+        usd_buy = fetch_bccr_indicator(317, date_str)
+        usd_sell = fetch_bccr_indicator(318, date_str)
+        euro_factor, euro_reference_date = fetch_euro_rate_with_fallback(current_date)
+
+        series.append({
+            "date": current_date.strftime("%d/%m/%Y"),
+            "usd": {
+                "compra": usd_buy,
+                "venta": usd_sell,
+            },
+            "euro": {
+                "compra": round(euro_factor * usd_buy, 2) if euro_factor and usd_buy else None,
+                "venta": round(euro_factor * usd_sell, 2) if euro_factor and usd_sell else None,
+                "fechaReferencia": euro_reference_date,
+            },
+        })
+
+    return series
+
 def read():
     """
     Retorna los tipos de cambio para el API.
@@ -102,3 +134,8 @@ def read():
         }
     }
     return [tipos[key] for key in sorted(tipos.keys())]
+
+
+def read_weekly():
+    """Retorna una serie semanal de tipos de cambio para la gráfica."""
+    return get_weekly_exchange_rates(7)

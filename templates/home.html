@@ -10,6 +10,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script>
     // This code will run when the entire page is loaded
     $(document).ready(function() {
@@ -60,6 +61,79 @@
             console.log("Request Failed: " + err);
         });
     });
+</script>
+<script>
+$(document).ready(function() {
+    $.getJSON("/api/tipodecambio/semanal", function(data) {
+        if (!data || !data.length) {
+            return;
+        }
+
+        var labels = data.map(function(item) { return item.date; });
+        var usdValues = data.map(function(item) { return item.usd.compra; });
+        var euroValues = data.map(function(item) { return item.euro.compra; });
+
+        var usdDelta = usdValues.length > 1 ? (usdValues[usdValues.length - 1] - usdValues[0]).toFixed(2) : "0.00";
+        var euroDelta = euroValues.length > 1 ? (euroValues[euroValues.length - 1] - euroValues[0]).toFixed(2) : "0.00";
+
+        var canvas = document.getElementById('weeklyExchangeChart');
+        if (!canvas) {
+            return;
+        }
+
+        new Chart(canvas, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'US Dólar',
+                        data: usdValues,
+                        borderColor: '#2d6cdf',
+                        backgroundColor: 'rgba(45, 108, 223, 0.12)',
+                        tension: 0.3,
+                        pointRadius: 4
+                    },
+                    {
+                        label: 'Euro',
+                        data: euroValues,
+                        borderColor: '#d9534f',
+                        backgroundColor: 'rgba(217, 83, 79, 0.12)',
+                        tension: 0.3,
+                        pointRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ₡ ' + Number(context.raw).toFixed(2);
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        ticks: {
+                            callback: function(value) {
+                                return '₡ ' + value;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        $('#weekly-variation').text('Variación semanal: Dólar ' + usdDelta + ' | Euro ' + euroDelta);
+    });
+});
 </script>
 <script>
 function enviar_ajax(){	
@@ -291,9 +365,27 @@ swal("Éxito!", "La URL ha sido copiada", "success");
               </div>         
             </section>
           </div>
-            
+
           <div class="tm-section-wrap bg-white">
             <section id="clients" class="row tm-section">
+              <div class="col-12 tm-section-pad">
+                  <div class="tm-flex-item-left">
+                      <div class="tm-w-80">
+                          <h2 class="tm-color-primary tm-section-title mb-4">Evolución semanal</h2>
+                          <p class="mb-4">Serie de los últimos 7 días del US Dólar y del Euro.</p>
+                          <p id="weekly-variation" class="mb-4 tm-color-gray"></p>
+                          <p class="mb-4">El tooltip muestra la fecha y el valor. Si el Euro no tiene dato del día, se usa el último valor oficial disponible del BCCR.</p>
+                      </div>
+                      <div style="height: 420px;">
+                        <canvas id="weeklyExchangeChart"></canvas>
+                      </div>
+                  </div>
+              </div>
+            </section>
+          </div>
+            
+          <div class="tm-section-wrap bg-white">
+            <section id="clients-old" class="row tm-section" style="display:none;">
               <div class="col-12 tm-section-pad">
                   <div class="tm-flex-item-left">
                       <div class="tm-w-80">
