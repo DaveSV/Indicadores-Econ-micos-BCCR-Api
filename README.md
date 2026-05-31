@@ -1,28 +1,29 @@
-﻿# Api_Indicadores_Economicos_Python_Swagger
+# Api_Indicadores_Economicos_Python_Swagger
 
 ## Tipo de Cambio Monetario
-Un indicador económico es un tipo de dato de carácter estadístico sobre la economía que permite realizar un análisis de la situación y del rendimiento de la economía tanto pasada como presente.
+API Flask/Connexion para consultar tipos de cambio del BCCR en formato JSON.
 
-En muchos casos sirve para realizar previsiones sobre la futura evolución de la economía.
+## Descripción
+La aplicación expone datos de tipo de cambio para US Dólar y Euro, con una vista principal y dos rutas públicas:
+- datos actuales
+- evolución semanal
 
-![image](https://github.com/user-attachments/assets/8b6afb74-2511-4b5a-b1cf-3d994f506641)
+El manejo del Euro contempla fines de semana: si el BCCR no publica dato del día, se usa el último valor oficial disponible.
 
+## Endpoints
+- `GET /api/tipodecambio`
+- `GET /api/tipodecambio/semanal`
 
-## Acerca de este sitio
-El Banco Central de Costa Rica ofrece un servicio web a clientes nacionales e internacionales que permite que los sistemas de instituciones o empresas puedan conectarse con el web service del BCCR y consultar información como el tipo de cambio con respecto al EUA dólar, otros tipos de cambio, tasas de interés, inflación, y otros indicadores de interés para el público, de una manera transparente y rápida.
+## Detalle
+`/api/tipodecambio` retorna la lista actual de divisas con compra, venta y fecha de referencia.
 
-Cualquier persona o institución, sea privada o pública, puede acceder esta información del día o histórica desde cualquier parte del mundo y sin ningún costo monetario. En este sitio hemos querido brindar de una forma simplificada algunos de los tipos de cambio vigentes al dia en formato JSON.
+`/api/tipodecambio/semanal` retorna una serie de los últimos 7 días para graficar la evolución del US Dólar y el Euro.
 
-Los datos y el uso de este servicio son gratuitos, y no requieren suscripción o registro previo.
+## Front-end
+La página principal incluye:
+- una explicación del servicio
+- una nota sobre el Euro en fines de semana
+- una gráfica semanal de evolución de tipo de cambio
 
-## Uso de los datos
-De ObtenerIndicadoresEconomicosXML-BCCR se obtiene los valores del indicador económico (XML) deseado para un rango de fecha determinado con formato dd/mm/yyyy (día/mes/año). Parámetros de entrada: código del indicador; fecha de inicio de tipo string; fecha final de tipo string; nombre de la persona que utiliza el servicio; indicador (S = Si o N = No) para especificar si desea o no obtener los subniveles del indicador a consultar; correo electrónico; y token de suscripción al servicio de consulta de indicadores. Retorna un XML.
-
-Nuestro sitio obtiene los valores de este XML y los conviente en un formato JSON, eliminando los valores de consulta adicionales, entregando únicamente los valores pertinentes a una consulta (Request) que necesite consumir:
-
-Compra
-Venta
-Fecha
-
-## Visible en:
+## Visible en
 https://exchangecr.albertosaenz.com/api/tipodecambio
