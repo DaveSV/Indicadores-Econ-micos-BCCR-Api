@@ -338,9 +338,27 @@ var aux = document.createElement("input");
 aux.setAttribute("value", window.location.origin + "/api/tipodecambio");
 document.body.appendChild(aux);
 aux.select();
+                            document.execCommand("copy");
+                            document.body.removeChild(aux);
+                            swal("Éxito!", "La URL ha sido copiada", "success");
+                            }
+                            //]]></script>
+                          </p>
+                          <p>
+                            Para la evolución semanal, utilice >> <a href="/api/tipodecambio/semanal" target="_blank"> /api/tipodecambio/semanal</a>
+                          </p>
+                          <p>
+                            <a href="javascript:getWeeklyLink();">Copiar URL semanal</a>
+
+<script>//<![CDATA[
+function getWeeklyLink() {
+var aux = document.createElement("input");
+aux.setAttribute("value", window.location.origin + "/api/tipodecambio/semanal");
+document.body.appendChild(aux);
+aux.select();
 document.execCommand("copy");
 document.body.removeChild(aux);
-swal("Éxito!", "La URL ha sido copiada", "success");
+swal("Éxito!", "La URL semanal ha sido copiada", "success");
 }
 //]]></script>
                           </p>
