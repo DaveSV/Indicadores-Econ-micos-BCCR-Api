@@ -18,15 +18,27 @@
             // Check if the data was successfully retrieved
             if (data && data.length > 0) {
                 let htmlContent = "";
+                let euroReferenceNote = "";
                 // Iterates through each currency in the API response
                 data.forEach(function(item) {
+                    if (item.divisa === "Euro" && item.fecha) {
+                        euroReferenceNote = `
+                            <p><small><strong>Nota:</strong> el valor del Euro corresponde al último día hábil disponible emitido por el BCCR cuando no hay publicación para sábado o domingo.</small></p>
+                        `;
+                    }
+
+                    const compra = item.compra === null || item.compra === undefined ? "No disponible" : `₡ ${parseFloat(item.compra).toFixed(2)}`;
+                    const venta = item.venta === null || item.venta === undefined ? "No disponible" : `₡ ${parseFloat(item.venta).toFixed(2)}`;
                     htmlContent += `
                         <p><strong>Divisa:</strong> ${item.divisa}</p>
-                        <p><strong>Compra:</strong> ₡ ${parseFloat(item.compra).toFixed(2)}</p>
-                        <p><strong>Venta:</strong> ₡ ${parseFloat(item.venta).toFixed(2)}</p>
+                        <p><strong>Fecha de referencia:</strong> ${item.fecha}</p>
+                        <p><strong>Compra:</strong> ${compra}</p>
+                        <p><strong>Venta:</strong> ${venta}</p>
                         <hr>
                     `;
                 });
+
+                htmlContent = euroReferenceNote + htmlContent;
 
                 // Displays the pop-up window using SweetAlert
                 swal({
@@ -242,6 +254,7 @@ indicadores. Retorna un XML.
                             Obtenga datos de tipos de cambio de US Dollar frente al CRC Colón de forma precisa y fiable actualizados cada 24 horas.</p>
                           <p>Utilice la siguiente URL en su Requests, Fetch o Get para obtener un <a href="https://www.json.org/json-es.html" target="_blank" title="¿Qué es un archivo JSON?"> JSON</a> con los datos >> <a href="/api/tipodecambio" target="_blank"> /api/tipodecambio</a>
                           </p>
+                          <p><strong>Importante:</strong> el Euro puede mostrarse con la fecha del último día hábil disponible cuando el BCCR no publica dato en fin de semana. No es un valor arrastrado, sino el último valor oficial emitido.</p>
                           <p>
                             <a href="javascript:getlink();">Copiar URL</a>
 
