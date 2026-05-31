@@ -30,7 +30,9 @@ paths:
                   type: "string"
                 compra:
                   type: "integer"
+                  type: "number"
                 venta:
                   type: "integer"
+                  type: "number"
                 fecha:
                   type: "string"

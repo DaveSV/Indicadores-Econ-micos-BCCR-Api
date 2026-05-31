@@ -15,6 +15,14 @@ SDDE_BASE_URL = "https://apim.bccr.fi.cr/SDDE/api/Bccr.Ge.SDDE.Publico.Indicador
 def get_timestamp():
     return datetime.now().strftime("%d/%m/%Y")
 
+
+def get_previous_business_day(date_obj):
+    """Return the previous business day, skipping Saturday and Sunday."""
+    date_obj -= timedelta(days=1)
+    while date_obj.weekday() >= 5:
+        date_obj -= timedelta(days=1)
+    return date_obj
+
 def fetch_bccr_indicator(indicator_code, date_str):
     """
     Función centralizada para consultas al BCCR. 
@@ -47,7 +55,26 @@ def fetch_bccr_indicator(indicator_code, date_str):
             
     except Exception as e:
         logger.error(f"Error al consultar indicador {indicator_code}: {e}")
-    return 0.0
+    return None
+
+
+def fetch_euro_rate_with_fallback(reference_date=None, max_lookback_days=7):
+    """
+    Obtiene el factor del Euro para la fecha dada.
+    Si el valor viene en 0 o no existe, retrocede hasta el último día hábil.
+    """
+    current_date = reference_date or datetime.now()
+
+    for _ in range(max_lookback_days):
+        date_str = current_date.strftime("%d/%m/%Y")
+        euro_rate = fetch_bccr_indicator(333, date_str)
+
+        if euro_rate and euro_rate > 0:
+            return euro_rate, date_str
+
+        current_date = get_previous_business_day(current_date)
+
+    return None, None
 
 def read():
     """
@@ -58,12 +85,7 @@ def read():
     # Consultas
     d_compra = fetch_bccr_indicator(317, hoy)
     d_venta = fetch_bccr_indicator(318, hoy)
-    e_factor = fetch_bccr_indicator(333, hoy)
-    
-    # Si el Euro falla hoy (a veces el BCCR no lo actualiza temprano), intentamos con ayer
-    if e_factor == 0:
-        ayer = (datetime.now() - timedelta(days=1)).strftime("%d/%m/%Y")
-        e_factor = fetch_bccr_indicator(333, ayer)
+    e_factor, euro_fecha = fetch_euro_rate_with_fallback()
 
     tipos = {
         "US Dólar": {
@@ -74,9 +96,9 @@ def read():
         },
         "Euro": {
             "divisa": "Euro",
-            "compra": round(e_factor * d_compra, 2) if e_factor > 0 else 0,
-            "venta": round(e_factor * d_venta, 2) if e_factor > 0 else 0,
-            "fecha": hoy
+            "compra": round(e_factor * d_compra, 2) if e_factor and d_compra else None,
+            "venta": round(e_factor * d_venta, 2) if e_factor and d_venta else None,
+            "fecha": euro_fecha or hoy
         }
     }
     return [tipos[key] for key in sorted(tipos.keys())]
